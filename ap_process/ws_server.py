@@ -49,7 +49,7 @@ def serve_ws():
 
 def smart_process():
     handler = Handler()
-    handler.set_action_config('[{"type":"while","condition1":"left_hand_stretch","condition2":"right_hand_fold","logic":"none","action":"move_left"}]')
+    # handler.set_action_config('[{"type":"while","condition1":"left_hand_stretch","condition2":"right_hand_fold","logic":"none","action":"move_left"}]')
     while True:
         err, frame = hobotx2.read_smart_frame()
         if err is not 0:

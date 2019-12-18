@@ -6,20 +6,20 @@ class Skeleton:
         'left_hand': 9,
         'right_hand': 10,
         'left_elbow': 7,
-        'right_elbow': 6,
+        'right_elbow': 8,
         'left_shoulder': 5,
         'right_shoulder': 6,
         'left_hip': 11,
         'right_hip': 12
     }
-    occ_threshold = 0.8
+    occ_threshold = 0.3
 
     def __init__(self, points):
         assert len(points) >= 17, "there should be no less than 17 points to initialize the skeleton"
         self.left_hand = points[9]
         self.right_hand = points[10]
         self.left_elbow = points[7]
-        self.right_elbow = points[6]
+        self.right_elbow = points[8]
         self.left_shoulder = points[5]
         self.right_shoulder = points[6]
         self.left_hip = points[11]
@@ -43,11 +43,11 @@ class Skeleton:
             return False
         length = math.sqrt(math.pow(self.points[i]['x'] - self.points[j]['x'], 2) +
                            math.pow(self.points[i]['y'] - self.points[j]['y'], 2))
-        return self.points[j][axis] - self.points[i][axis] < length * extent
+        return math.fabs(self.points[j][axis] - self.points[i][axis]) < length * extent
 
 
 class PlayerStatus:
-    img_width = 1080
+    img_width = 1920
 
     def __init__(self):
         self.left_hand_status = None
@@ -60,7 +60,7 @@ class PlayerStatus:
     def update_status(self, box, points):
         skeleton = Skeleton(points)
         half_img_width = PlayerStatus.img_width // 2
-        if box[0] < half_img_width < box[2] and box[2] - box[0] > PlayerStatus.img_width / 4:
+        if (box[0] < half_img_width < box[2]) and ((box[2] - box[0]) > PlayerStatus.img_width / 8):
             self.player_in_view_status = "in"
         else:
             self.player_in_view_status = "out"
@@ -69,27 +69,29 @@ class PlayerStatus:
             self.left_hand_status = None
             self.right_hand_status = None
             return
-        if skeleton.point_nearly_equal_to("left_hand", "left_elbow", "y", 0.2) \
-            and skeleton.point_nearly_equal_to("left_hand", "left_shoulder", "y", 0.2) \
+        if skeleton.point_nearly_equal_to("left_hand", "left_elbow", "y", 0.5) \
+            and skeleton.point_nearly_equal_to("left_hand", "left_shoulder", "y", 0.5) \
             and skeleton.point_less_than("left_shoulder", "left_hand", "x", 0.7):
             self.left_hand_status = "stretch"
-        elif skeleton.point_nearly_equal_to("left_hand", "left_elbow", "y", 0.2) \
-            and skeleton.point_nearly_equal_to("left_elbow", "left_shoulder", "x", 0.5):
+        elif skeleton.point_nearly_equal_to("left_hand", "left_elbow", "y", 0.5) \
+            and skeleton.point_less_than("left_hand", "left_shoulder", "x", 0.1) \
+            and skeleton.point_less_than("left_hand", "left_elbow", "x", 0.7):
             self.left_hand_status = "fold"
-        elif skeleton.point_less_than("left_elbow", "left_hand", "y", 0.8) \
-            and skeleton.point_less_than("left_shoulder", "left_hand", "y", 0.7):
+        elif skeleton.point_less_than("left_hand", "left_elbow", "y", 0.5) \
+            and skeleton.point_less_than("left_hand", "left_shoulder", "y", 0.1):
             self.left_hand_status = "up"
         else:
             self.left_hand_status = None
-        if skeleton.point_nearly_equal_to("right_hand", "right_elbow", "y", 0.2) \
-            and skeleton.point_nearly_equal_to("right_hand", "right_shoulder", "y", 0.2) \
+        if skeleton.point_nearly_equal_to("right_hand", "right_elbow", "y", 0.5) \
+            and skeleton.point_nearly_equal_to("right_hand", "right_shoulder", "y", 0.5) \
             and skeleton.point_less_than("right_hand", "right_shoulder", "x", 0.7):
             self.right_hand_status = "stretch"
-        elif skeleton.point_nearly_equal_to("right_hand", "right_elbow", "y", 0.2) \
-                and skeleton.point_nearly_equal_to("right_elbow", "right_shoulder", "x", 0.5):
+        elif skeleton.point_nearly_equal_to("right_hand", "right_elbow", "y", 0.5) \
+                and skeleton.point_less_than("right_shoulder", "right_hand", "x", 0.1) \
+                and skeleton.point_less_than("right_elbow", "right_hand", "x", 0.7):
             self.right_hand_status = "fold"
-        elif skeleton.point_less_than("right_elbow", "right_hand", "y", 0.8) \
-                and skeleton.point_less_than("right_shoulder", "right_hand", "y", 0.7):
+        elif skeleton.point_less_than("right_hand", "right_elbow", "y", 0.5) \
+                and skeleton.point_less_than("right_hand", "right_shoulder", "y", 0.1):
             self.right_hand_status = "up"
         else:
             self.right_hand_status = None
