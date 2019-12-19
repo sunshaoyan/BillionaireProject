@@ -1,1 +1,4 @@
 ap_process/venv/
+golang-server/vendor/
+golang-server/.DS_Store
+golang-server/.idea/
