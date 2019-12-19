@@ -1,0 +1,32 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-react",
+    "tslint-eslint-rules",
+    "tslint-config-prettier",
+    "tslint-plugin-prettier"
+  ],
+  "jsRules": {
+    "object-literal-sort-keys": false
+  },
+  "rules": {
+    "prettier": [true, ".prettierrc.js"],
+    "no-console": false, // 可以打印
+    "jsx-no-lambda": false, // 可以在 jsx 里使用匿名函数
+    "no-submodule-imports": false, // 可以导入子模块
+    "no-implicit-dependencies": [
+      true,
+      ["@", "@tests", "enzyme", "enzyme-adapter-react-16", "mockjs"]
+    ],
+    "ordered-imports": false, // 不强制对 import 排序
+    "object-literal-sort-keys": false, // 不强制对对象 key 排序
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-leading-underscore",
+      "allow-pascal-case"
+    ], // 变量名可以以下划线(_)开头
+    "member-access": false
+  }
+}
