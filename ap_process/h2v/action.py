@@ -59,11 +59,11 @@ class Action:
         }
     """
     def evoke(self, player_status):
-        condition1_meet = Action.meet_condition(self.condition1, player_status, self.action_type)
-        condition2_meet = Action.meet_condition(self.condition2, player_status, self.action_type)
+        condition1_meet, not_new_meet1 = Action.meet_condition(self.condition1, player_status, self.action_type)
+        condition2_meet, not_new_meet2 = Action.meet_condition(self.condition2, player_status, self.action_type)
         final_meet = False
         if self.logic == "and":
-            final_meet = condition1_meet and condition2_meet
+            final_meet = (not_new_meet1 and not_new_meet2) and (condition1_meet or condition2_meet)
         elif self.logic == "or":
             final_meet = condition1_meet or condition2_meet
         else:
@@ -88,17 +88,17 @@ class Action:
         if condition_name.startswith("left"):
             action = condition_name[10:]
             return status["left_hand"]["status"] == action and \
-                (can_be_not_new_status or status["left_hand"]["is_new"])
+                (can_be_not_new_status or status["left_hand"]["is_new"]), status["left_hand"]["status"] == action
         elif condition_name.startswith("right"):
             action = condition_name[11:]
             return status["right_hand"]["status"] == action and \
-                (can_be_not_new_status or status["right_hand"]["is_new"])
-        elif condition_name.startswith["player"]:
+                (can_be_not_new_status or status["right_hand"]["is_new"]), status["right_hand"]["status"] == action
+        elif condition_name.startswith("player"):
             action = condition_name[7:]
             return status["player_in_view"]["status"] == action and \
-                (can_be_not_new_status or status["player_in_view"]["is_new"])
+                (can_be_not_new_status or status["player_in_view"]["is_new"]), status["player_in_view"]["status"] == action
         else:
-            return False
+            return False, False
 
 
 class ActionContainer:

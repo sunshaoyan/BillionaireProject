@@ -43,13 +43,12 @@ class Handler:
             tr.start()
             if box is None or points is None:
                 print('nobody')
-                return
             self.player_status.update_status(box, points)
             status = self.player_status.get_status()
-            print('before_status: {}'.format(status))
-            if (status["left_hand"]["status"] != None or status["right_hand"]["status"] != None) \
-                    and (status["player_in_view"]["status"] == "in"):
-                print('status: {}'.format(status))
+            print('status: {}'.format(status))
+            # if (status["left_hand"]["status"] != None or status["right_hand"]["status"] != None) \
+            #        and (status["player_in_view"]["status"] == "in"):
+            #    print('status: {}'.format(status))
             self.action_container.process(status)
             self.player_status.update_previous()
 

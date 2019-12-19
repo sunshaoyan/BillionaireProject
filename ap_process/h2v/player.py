@@ -58,17 +58,18 @@ class PlayerStatus:
         self.player_in_view_previous_status = None
 
     def update_status(self, box, points):
-        skeleton = Skeleton(points)
         half_img_width = PlayerStatus.img_width // 2
-        if (box[0] < half_img_width < box[2]) and ((box[2] - box[0]) > PlayerStatus.img_width / 8):
+        if (box is not None) and (box[0] < half_img_width < box[2]) and \
+                ((box[2] - box[0]) > PlayerStatus.img_width / 8):
             self.player_in_view_status = "in"
         else:
             self.player_in_view_status = "out"
 
-        if skeleton is None:
+        if points is None:
             self.left_hand_status = None
             self.right_hand_status = None
             return
+        skeleton = Skeleton(points)
         if skeleton.point_nearly_equal_to("left_hand", "left_elbow", "y", 0.5) \
             and skeleton.point_nearly_equal_to("left_hand", "left_shoulder", "y", 0.5) \
             and skeleton.point_less_than("left_shoulder", "left_hand", "x", 0.7):
