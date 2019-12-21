@@ -36,6 +36,7 @@
     "react-json-pretty": "^2.1.0",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.0.1",
+    "react-syntax-highlighter": "^12.2.1",
     "tslib": "^1.10.0"
   },
   "devDependencies": {

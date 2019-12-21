@@ -1,14 +1,22 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch, IRootState } from '@/store'
-import { Button, Icon, Card, Radio } from 'antd'
+import { Button, Icon, Card, Radio, Affix, message } from 'antd'
 import { COLOR_POOL } from '@/config/constants'
 import forward from '@/assets/images/forward.png'
 import backward from '@/assets/images/backward.png'
-import left from '@/assets/images/left.jpg'
+import left from '@/assets/images/left.png'
 import right from '@/assets/images/right.png'
-import turnLeft from '@/assets/images/turnLeft.jpg'
-import turnRight from '@/assets/images/turnRight.jpg'
+import turnLeft from '@/assets/images/turnLeft.png'
+import turnRight from '@/assets/images/turnRight.png'
+import leftHandStretch from '@/assets/images/leftHandStretch.png'
+import rightHandStretch from '@/assets/images/rightHandStretch.png'
+import leftHandFold from '@/assets/images/leftHandFold.png'
+import rightHandFold from '@/assets/images/rightHandFold.png'
+import leftHandUp from '@/assets/images/leftHandUp.png'
+import rightHandUp from '@/assets/images/rightHandUp.png'
+import playerOut from '@/assets/images/playerOut.png'
+import playerIn from '@/assets/images/playerIn.png'
 
 import './index.less'
 
@@ -27,18 +35,40 @@ const mapDispatch = (dispatch: Dispatch) => ({
 })
 
 class Workspace extends Component<IWorkspaceProps> {
+  container: any
   constructor(props) {
     super(props)
+    this.container = null
   }
 
   handleUpdateScope = () => {
     this.props.updateList(null)
   }
 
+  handleDelete = index => {
+    const { scopeList } = this.props
+    scopeList.splice(index, 1)
+    this.props.updateState({
+      scopeList: [...scopeList]
+    })
+  }
+
   handleAddCondition = index => {
+    const conditions = [
+      'left_hand_stretch',
+      'right_hand_stretch',
+      'left_hand_fold',
+      'right_hand_fold',
+      'left_hand_up',
+      'right_hand_up',
+      'player_in',
+      'player_out'
+    ]
     const { scopeList } = this.props
     const scope = scopeList[index]
     scope.logic = 'or'
+    conditions.splice(conditions.indexOf(scope.condition1), 1)
+    scope.condition2 = conditions[0]
     this.props.updateState({
       scopeList: [...scopeList]
     })
@@ -71,10 +101,29 @@ class Workspace extends Component<IWorkspaceProps> {
     })
   }
 
+  handleSendToCar = () => {
+    // this.props.sendToCar(null)
+    setTimeout(() => {
+      message.success('send success')
+    }, 500)
+  }
+
   render() {
     const { scopeList } = this.props
     return (
-      <div className="editor">
+      <div
+        className="editor"
+        ref={node => {
+          this.container = node
+        }}
+      >
+        <div className="submit">
+          <Affix target={() => this.container}>
+            <Button type="primary" onClick={this.handleSendToCar}>
+              Send to car
+            </Button>
+          </Affix>
+        </div>
         <div className="list">
           {scopeList.map((scope, index) => {
             const { type, condition1, condition2, logic, action } = scope
@@ -92,6 +141,15 @@ class Workspace extends Component<IWorkspaceProps> {
                 style={{
                   border: `3px solid ${cardBorder}`
                 }}
+                extra={
+                  <Button
+                    size="small"
+                    type="danger"
+                    shape="circle"
+                    icon="close"
+                    onClick={() => this.handleDelete(index)}
+                  />
+                }
               >
                 <div className="condition-wrapper">
                   <div className="type">
@@ -116,17 +174,29 @@ class Workspace extends Component<IWorkspaceProps> {
                       value={condition1}
                     >
                       <Radio value={'left_hand_stretch'}>
-                        left_hand_stretch
+                        <img src={leftHandStretch} />
                       </Radio>
                       <Radio value={'right_hand_stretch'}>
-                        right_hand_stretch
+                        <img src={rightHandStretch} />
                       </Radio>
-                      <Radio value={'left_hand_fold'}>left_hand_fold</Radio>
-                      <Radio value={'right_hand_fold'}>right_hand_fold</Radio>
-                      <Radio value={'left_hand_up'}>left_hand_up</Radio>
-                      <Radio value={'right_hand_up'}>right_hand_up</Radio>
-                      <Radio value={'player_in'}>player_in</Radio>
-                      <Radio value={'player_out'}>player_out</Radio>
+                      <Radio value={'left_hand_fold'}>
+                        <img src={leftHandFold} />
+                      </Radio>
+                      <Radio value={'right_hand_fold'}>
+                        <img src={rightHandFold} />
+                      </Radio>
+                      <Radio value={'left_hand_up'}>
+                        <img src={leftHandUp} />
+                      </Radio>
+                      <Radio value={'right_hand_up'}>
+                        <img src={rightHandUp} />
+                      </Radio>
+                      <Radio value={'player_in'}>
+                        <img className="player-in" src={playerIn} />
+                      </Radio>
+                      <Radio value={'player_out'}>
+                        <img className="player-out" src={playerOut} />
+                      </Radio>
                     </Radio.Group>
                     {logic !== 'none' ? (
                       <>
@@ -148,20 +218,54 @@ class Workspace extends Component<IWorkspaceProps> {
                           }
                           value={condition2}
                         >
-                          <Radio value={'left_hand_stretch'}>
-                            left_hand_stretch
+                          <Radio
+                            value={'left_hand_stretch'}
+                            disabled={condition1 === 'left_hand_stretch'}
+                          >
+                            <img src={leftHandStretch} />
                           </Radio>
-                          <Radio value={'right_hand_stretch'}>
-                            right_hand_stretch
+                          <Radio
+                            value={'right_hand_stretch'}
+                            disabled={condition1 === 'right_hand_stretch'}
+                          >
+                            <img src={rightHandStretch} />
                           </Radio>
-                          <Radio value={'left_hand_fold'}>left_hand_fold</Radio>
-                          <Radio value={'right_hand_fold'}>
-                            right_hand_fold
+                          <Radio
+                            value={'left_hand_fold'}
+                            disabled={condition1 === 'left_hand_fold'}
+                          >
+                            <img src={leftHandFold} />
                           </Radio>
-                          <Radio value={'left_hand_up'}>left_hand_up</Radio>
-                          <Radio value={'right_hand_up'}>right_hand_up</Radio>
-                          <Radio value={'player_in'}>player_in</Radio>
-                          <Radio value={'player_out'}>player_out</Radio>
+                          <Radio
+                            value={'right_hand_fold'}
+                            disabled={condition1 === 'right_hand_fold'}
+                          >
+                            <img src={rightHandFold} />
+                          </Radio>
+                          <Radio
+                            value={'left_hand_up'}
+                            disabled={condition1 === 'left_hand_up'}
+                          >
+                            <img src={leftHandUp} />
+                          </Radio>
+                          <Radio
+                            value={'right_hand_up'}
+                            disabled={condition1 === 'right_hand_up'}
+                          >
+                            <img src={rightHandUp} />
+                          </Radio>
+                          <Radio
+                            value={'player_in'}
+                            disabled={condition1 === 'player_in'}
+                          >
+                            <img className="player-in" src={playerIn} />
+                          </Radio>
+                          <Radio
+                            value={'player_out'}
+                            disabled={condition1 === 'player_out'}
+                          >
+                            <img className="player-out" src={playerOut} />
+                          </Radio>
                         </Radio.Group>
                       </>
                     ) : (
@@ -179,7 +283,6 @@ class Workspace extends Component<IWorkspaceProps> {
                     )}
                   </div>
                 </div>
-
                 <div
                   className="action"
                   style={{
