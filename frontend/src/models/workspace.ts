@@ -1,4 +1,6 @@
 import { createModel } from '@rematch/core'
+import * as services from '@/services/index'
+import { message } from 'antd'
 
 export const workspace = createModel({
   state: {
@@ -24,8 +26,12 @@ export const workspace = createModel({
   },
 
   effects: () => ({
-    sendToCar(payload, rootState) {
-      console.log(payload, rootState)
+    async sendToCar(_, rootState) {
+      const { scopeList } = rootState.workspace
+      const data = await services.workspace.sendToCar(scopeList)
+      if (data.code === 0) {
+        message.success('send success')
+      }
     },
 
     updateList(_payload, rootState) {

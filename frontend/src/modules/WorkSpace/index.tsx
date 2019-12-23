@@ -102,10 +102,7 @@ class Workspace extends Component<IWorkspaceProps> {
   }
 
   handleSendToCar = () => {
-    // this.props.sendToCar(null)
-    setTimeout(() => {
-      message.success('send success')
-    }, 500)
+    this.props.sendToCar(null)
   }
 
   render() {

@@ -1,14 +1,17 @@
-// import { request } from './request'
+import { request } from './request'
 
 const api = {
   toCar: {
-    url: '/datasys/rbac/user/info/',
-    method: 'get'
+    url: '/hackathon/set',
+    method: 'post'
   }
 }
 
 export const workspace = {
   async sendToCar(list) {
-    console.log(list, api)
+    const response: any = await request(api.toCar, {
+      data: JSON.stringify(list)
+    })
+    return response
   }
 }
