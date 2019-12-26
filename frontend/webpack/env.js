@@ -7,20 +7,19 @@ module.exports = {
       port: 9999,
       host: '0.0.0.0',
       proxy: {
-        '/api': {
-          target: 'http://apistore.hobot.cc/mock/209',
+        '/hackathon': {
+          target: 'http://192.168.1.221:8080',
           secure: false,
           changeOrigin: true
-        },
-        '/dms': {
-          //target: 'https://dms.horizon.ai/dms/v1/driver_behavior',
-          target: 'http://10.10.108.117:9500',
-          secure: false,
-          changeOrigin: true,
-          headers: {
-            Host: '0.0.0.0'
-          }
         }
+        // '/hackathon': {
+        //   target: 'http://192.168.1.221:8080',
+        //   secure: false,
+        //   changeOrigin: true,
+        //   headers: {
+        //     Host: '0.0.0.0'
+        //   }
+        // }
       }
     }
   },

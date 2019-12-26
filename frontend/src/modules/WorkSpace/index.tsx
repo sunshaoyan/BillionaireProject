@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch, IRootState } from '@/store'
-import { Button, Icon, Card, Radio, Affix, message } from 'antd'
+import { Button, Icon, Card, Radio, Affix } from 'antd'
 import { COLOR_POOL } from '@/config/constants'
 import forward from '@/assets/images/forward.png'
 import backward from '@/assets/images/backward.png'
