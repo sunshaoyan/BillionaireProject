@@ -1,0 +1,4 @@
+appname: hackathon
+appversion: 0.0.1
+appmode: debug
+port : 8080
