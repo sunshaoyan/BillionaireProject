@@ -16,7 +16,7 @@ def send_kps(points):
 class Handler:
     MIN_KPS_AREA = 70 * 100
     MIN_BOX_AREA = 70 * 200
-    MIN_TIME_INTERVAL = 1000
+    MIN_TIME_INTERVAL = 80
     TIME_PER_FRAME = 40
 
     def __init__(self):

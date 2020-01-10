@@ -105,6 +105,7 @@ class ActionContainer:
 
     def __init__(self):
         self.actions = []
+        self.cl = threading.Lock()
 
     """
     sample config:
@@ -117,13 +118,20 @@ class ActionContainer:
     }]
     """
     def set_config(self, config_str):
+        print('configuring')
+        print(config_str)
+        self.cl.acquire()
         self.actions = []
         configs = json.loads(config_str)
         for cfg in configs:
             action = Action(cfg['type'], cfg['condition1'], cfg['condition2'], cfg['logic'], cfg['action'])
             self.actions.append(action)
+        send_command("stop")
+        self.cl.release()
 
     def process(self, status):
+        self.cl.acquire()
         for action in self.actions:
             action.evoke(status)
+        self.cl.release()
 
